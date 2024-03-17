@@ -1,0 +1,5 @@
+{
+    "code-runner.executorMap": {
+        "cpp": "cd $dir; if (!(Test-Path build)) { New-Item -ItemType Directory -Name build }; g++ $fileName -o build/$fileNameWithoutExt.exe; if ($?) { .\\build\\$fileNameWithoutExt }"
+    }
+}
