@@ -31,8 +31,8 @@ struct segtree{
     }
     void update(int rt,int l,int r,int L,int R,int v){
         if(L <= l && r <= R){
-            sum[rt] += (r - l + 1) * v;
-            lazy[rt] += v;
+            sum[rt] = (r - l + 1) * v;
+            lazy[rt] = v;
             return;
         }
         pushdown(rt,l,r);
@@ -92,7 +92,7 @@ void solve(){
                         continue;
                     ans += tr.query(1,1,n,l+cnt,min(r+cnt,n));
                     i ^= (1 << j);
-                    cout <<j<<' '<< cnt<<' '<<l<<' '<<r<<' '<<ans << '\n';
+                    // cout <<j<<' '<< cnt<<' '<<l<<' '<<r<<' '<<ans << '\n';
                 }
             }
             // cout << 1 << " ";
