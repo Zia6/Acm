@@ -2,6 +2,7 @@
 #include<cstring>
 #include<map>
 #include<vector>
+#include<algorithm>
 using namespace std;
 #define int long long
 const int N = 1e5 + 100;
@@ -120,6 +121,9 @@ void init2(){
     tot = 0;
     maxdept=0;
 }
+bool cmp(int a,int b){
+    return in[a] < in[b];
+}
 void solve(){
     // cout << "solve\n";
     init2();
@@ -135,35 +139,42 @@ void solve(){
     // cout<<"end"<<'\n';
     int u, k;
     ll w;
-    while (m--){
-        cin >> u >> k>>w;
-        int d=deep[u]+k;
-        if(d<=0||d>N-1||v[d].size()==0) {
-            cout<<"0\n";
-            continue;
+    // for (int i = 1; i <= maxdept;i++){
+    //     sort(v[i].begin(), v[i].end(),cmp);
+    // }
+        while (m--)
+        {
+            cin >> u >> k >> w;
+            int d = deep[u] + k;
+            if (d <= 0 || d > N - 1 || v[d].size() == 0)
+            {
+                cout << "0\n";
+                continue;
+            }
+            int l = 0, r = v[d].size() - 1;
+            int s, t;
+            while (l < r)
+            {
+                int mid = (l + r) >> 1;
+                if (in[u] <= in[v[d][mid]])
+                    r = mid;
+                else
+                    l = mid + 1;
+            }
+            s = l;
+            r = v[d].size() - 1;
+            while (l < r)
+            {
+                int mid = (l + r + 1) >> 1;
+                if (out[u] >= out[v[d][mid]])
+                    l = mid;
+                else
+                    r = mid - 1;
+            }
+            t = l;
+            update(tree[d], 1, v[d].size(), s + 1, t + 1, w);
+            cout << query(tree[d], 1, v[d].size(), s + 1, t + 1) << '\n';
         }
-        int l = 0,r=v[d].size()-1;
-        int s, t;
-        while(l<r){
-            int mid = (l + r) >> 1;
-            if(in[u]<=in[v[d][mid]])
-                r = mid;
-            else
-                l = mid + 1;
-        }
-        s = l;
-        l = 0, r = v[d].size() - 1;
-        while(l<r){
-            int mid = (l + r + 1) >> 1;
-            if(out[u]>=out[v[d][mid]])
-                l = mid;
-            else
-                r = mid - 1;
-        }
-        t = l;
-        update(tree[d], 1, v[d].size(), s+1, t+1, w);
-        cout<<query(tree[d],1,v[d].size(),s+1,t+1)<<'\n';
-    }
     for(int i=1;i<=maxdept;i++) {
         cleanup(tree[i]);
         tree[i]=NULL;
