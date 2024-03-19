@@ -54,7 +54,7 @@ struct segtree{
         if(R > mid)
             ans += query(rt << 1 | 1,mid + 1,r,L,R);
         return ans;
-    }
+    } 
 }tr;
 
 void init(){
