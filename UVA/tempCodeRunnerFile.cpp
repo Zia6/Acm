@@ -5,6 +5,7 @@
 #include <queue>
 using namespace std;
 const int N = 256;
+<<<<<<< HEAD
 long long vis1[280][280][280];
 long long vis2[280][280][280];
 map<char, int> st, en;
@@ -15,13 +16,28 @@ struct state
 {
     int a[4] = {0};
     long long step;
+=======
+bool vis[273][273][273];
+map<char, int> st, en;
+char mp[10];
+char g[273][273];
+int w, h, n, tot;
+struct state
+{
+    int a[4]={0};
+    int step;
+>>>>>>> eeda07228896cbd15761bf1922e00c2f13c3526e
 };
 struct edge
 {
     int to;
     int nex;
 } e[N * 10];
+<<<<<<< HEAD
 int head[N * 10], cnt = 0;
+=======
+int head[N * 10], cnt=0;
+>>>>>>> eeda07228896cbd15761bf1922e00c2f13c3526e
 void add(int u, int v)
 {
     e[cnt].to = v;
@@ -31,8 +47,12 @@ void add(int u, int v)
 void init()
 {
     memset(head, -1, sizeof(head));
+<<<<<<< HEAD
     memset(vis1, 0, sizeof(vis1));
     memset(vis2, 0, sizeof(vis2));
+=======
+    memset(vis, 0, sizeof(vis));
+>>>>>>> eeda07228896cbd15761bf1922e00c2f13c3526e
     st.clear();
     en.clear();
     memset(mp, 0, sizeof(mp));
@@ -46,6 +66,81 @@ void graph()
     for (int i = 1; i <= w; i++)
     {
         for (int j = 1; j <= h; j++)
+<<<<<<< HEAD
+=======
+        {
+            if (g[i][j] == '#')
+                continue;
+            if (i > 1 && g[i - 1][j] != '#')
+            {
+                add(i * h + j, (i - 1) * h + j);
+            }
+            if (j > 1 && g[i][j - 1] != '#')
+            {
+                add(i * h + j, i * h + j - 1);
+            }
+            if(i<=w-1&&g[i+1][j]!='#')
+            {
+                add(i*h+j,(i+1)*h+j);
+            }
+            if(j<=h-1&&g[i][j+1]!='#')
+            {
+                add(i*h+j,i*h+j+1);
+            }
+            add(i*h+j,i*h+j);
+        }
+    }
+}
+bool check(state &s)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (s.a[i] != en[mp[i]])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+bool walk(state& s,state& u){
+     if(s.a[0]==u.a[1]&&s.a[1]==u.a[0]&&s.a[2]==u.a[2]){
+         return false;
+     }else if(s.a[0]==u.a[2]&&s.a[2]==u.a[0]){
+         return false;
+     }
+    else if(s.a[1]==u.a[2]&&s.a[2]==u.a[1]){
+        return false;
+    }else if(s.a[0]==u.a[1]&&s.a[1]==u.a[0]){
+        return false;
+    }else if(u.a[0]==u.a[1]||u.a[0]==u.a[2]||u.a[1]==u.a[2]){
+        return false;
+    }
+    return true;
+}
+queue<state> q;
+void bfs()
+{
+    state s;
+    
+    for (int i = 0; i < n; i++)
+    {
+        s.a[i] = st[mp[i]];
+    }
+    s.step = 0;
+    q.push(s);
+    while (!q.empty())
+    {
+
+        state u = q.front();
+        // cout<<u.a[0]<<' '<<u.a[1]<<' '<<u.a[2]<<' '<<u.step<<'\n';
+        q.pop();
+        if (check(u))
+        {
+            cout << u.step << endl;
+            return;
+        }
+        for (int i = head[u.a[0]]; ~i; i = e[i].nex)
+>>>>>>> eeda07228896cbd15761bf1922e00c2f13c3526e
         {
             if (g[i][j] == '#')
                 continue;
@@ -142,7 +237,16 @@ void bfs()
             {
                 for (int j = head[u.a[1]]; ~j; j = e[j].nex)
                 {
+<<<<<<< HEAD
                     for (int k = head[u.a[2]]; ~k; k = e[k].nex)
+=======
+                    state v;
+                    v.a[0] = e[i].to;
+                    v.a[1] = e[j].to;
+                    v.a[2] = e[k].to;
+                    v.step = u.step + 1;
+                    if (walk(u,v)&&!vis[v.a[0]][v.a[1]][v.a[2]])
+>>>>>>> eeda07228896cbd15761bf1922e00c2f13c3526e
                     {
                         state v;
                         v.a[0] = e[i].to;
@@ -173,6 +277,7 @@ void bfs()
                 }
             }
         }
+<<<<<<< HEAD
         if (!q2.empty())
         {
             state u = q2.front();
@@ -223,6 +328,11 @@ void bfs()
             }
         }
     }
+=======
+
+    }
+    cout << -1 << '\n';
+>>>>>>> eeda07228896cbd15761bf1922e00c2f13c3526e
 }
 void solve()
 {
@@ -247,12 +357,17 @@ void solve()
         }
         // printf("\n");
         getchar();
+<<<<<<< HEAD
+=======
+
+>>>>>>> eeda07228896cbd15761bf1922e00c2f13c3526e
     }
     // for (int i = 0; i < n;i++){
     //     printf("%c %d %d\n", mp[i], st[mp[i]], en[mp[i]]);
     // }
     graph();
     bfs();
+<<<<<<< HEAD
     while (!q1.empty())
     {
         q1.pop();
@@ -267,6 +382,15 @@ int main()
 {
     while (scanf("%d %d %d", &h, &w, &n) && w || h || n)
     {
+=======
+    while(!q.empty()){
+        q.pop();
+    }
+}
+int main()
+{
+    while (scanf("%d %d %d",&h,&w,&n) && w || h || n){
+>>>>>>> eeda07228896cbd15761bf1922e00c2f13c3526e
         // printf("%d %d %d\n",h,w,n);
         solve();
     }
