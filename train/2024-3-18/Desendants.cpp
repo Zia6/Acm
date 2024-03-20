@@ -112,12 +112,14 @@ void init2(){
     // cout<<"init2\n";
     cnt = 0;
     for (int i = 0; i < N;i++){
+        v[i].clear();
         v[i].resize(0);
     }
     memset(in, 0, sizeof in);
     memset(head,-1,sizeof head);
     memset(deep,0,sizeof deep);
     memset(out,0,sizeof out);
+    memset(e,0,sizeof e);
     tot = 0;
     maxdept=0;
 }
@@ -146,12 +148,12 @@ void solve(){
         {
             cin >> u >> k >> w;
             int d = deep[u] + k;
-            if (d <= 0 || d > N - 1 || v[d].size() == 0)
+            if (d <= 0 || d > maxdept || (v[d].size() <= 0))
             {
                 cout << "0\n";
                 continue;
             }
-            int l = 0, r = v[d].size() - 1;
+            int l = 0, r = (int)v[d].size() - 1;
             int s, t;
             while (l < r)
             {
@@ -162,7 +164,11 @@ void solve(){
                     l = mid + 1;
             }
             s = l;
-            r = v[d].size() - 1;
+             if (in[ v[d][l] ] < in[u] || in[ v[d][l] ] > out[u]) {
+                 cout << "0\n";
+                 continue;
+             }
+            r = (int)v[d].size() - 1;
             while (l < r)
             {
                 int mid = (l + r + 1) >> 1;
@@ -177,7 +183,6 @@ void solve(){
         }
     for(int i=1;i<=maxdept;i++) {
         cleanup(tree[i]);
-        tree[i]=NULL;
     }
     tree.clear();
 }
