@@ -8,11 +8,11 @@ void euler()
     int cnt = 0;
     for (int i = 2; i < N; i++)
     {
-        if (!vis[i])
+        if (!vis[i
         {
             prime[cnt++] = i;
         }
-        for (int j = 0; j < cnt && i * prime[j] < N; j++)
+        for (int j = 0; j < cnt && i * prime[j] < N; j++)       
         {
             vis[i * prime[j]] = 1;
             if (i % prime[j] == 0)
