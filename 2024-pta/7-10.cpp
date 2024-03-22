@@ -1,20 +1,25 @@
 #include<iostream>
 #include<queue>
+#include<set>
 using namespace std;
-vector<int> v;
+set<int> v;
 int main(){
     int n;
     cin>>n;
     int t=0;
     for(int i=0;i<n;i++){
         cin>>t;
-        int flag=0;
-        int x=v.size();
-        int maxv=0;
-        if(x==0){
-            v.push_back(t);
-            maxv=max(maxv,t);
-            continue;
+        if(v.size()==0){
+            v.insert(t);
+        }
+        else {
+            auto s=v.lower_bound(t);
+            if(s==v.end()){
+                v.insert(t);
+            }else {
+                v.erase(s);
+                v.insert(t);
+            }
         }
     }
     cout<<v.size()<<'\n';

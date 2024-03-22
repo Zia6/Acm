@@ -120,15 +120,21 @@ void bfs()
         ee.a[i] = en[mp[i]];
     }
     s.step = 0;
-    ee.step = 1;
+    ee.step = 0;
     q1.push(s);
     q2.push(ee);
     vis2[ee.a[0]][ee.a[1]][ee.a[2]] = 1;
+    vis1[s.a[0]][s.a[1]][s.a[2]] = 1;
+    int d1 = 0, d2 = 0;
     while (!q1.empty() || !q2.empty())
     {
-        if (!q1.empty())
+        while (!q1.empty())
         {
             state u = q1.front();
+            if(u.step>d1){
+                d1++;
+                break;
+            }
             // cout<<u.a[0]<<' '<<u.a[1]<<' '<<u.a[2]<<' '<<u.step<<'\n';
             q1.pop();
             // if (vis2[u.a[0]][u.a[1]][u.a[2]]>0&&vis1[u.a[0]][u.a[1]][u.a[2]]>0)
@@ -153,17 +159,18 @@ void bfs()
                         {
                             if (!vis1[v.a[0]][v.a[1]][v.a[2]])
                             {
+
                                 vis1[v.a[0]][v.a[1]][v.a[2]] = v.step;
+                                if (vis2[v.a[0]][v.a[1]][v.a[2]])
+                                {
+                                    // cout << 1 << ' ';
+                                    // cout<<v.a[0]<<' '<<v.a[1]<<' '<<v.a[2]<<' '<<v.step<<'\n';
+                                    cout << vis2[v.a[0]][v.a[1]][v.a[2]] + vis1[v.a[0]][v.a[1]][v.a[2]] << '\n';
+                                    return;
+                                }
                                 q1.push(v);
                                 // cout << '1' << ' ';
                                 // cout<<v.a[0]<<' '<<v.a[1]<<' '<<v.a[2]<<' '<<v.step<<'\n';
-                            }
-                            if (vis2[v.a[0]][v.a[1]][v.a[2]])
-                            {
-                                // cout << 1 << ' ';
-                                // cout<<v.a[0]<<' '<<v.a[1]<<' '<<v.a[2]<<' '<<v.step<<'\n';
-                                cout << vis2[v.a[0]][v.a[1]][v.a[2]] + vis1[v.a[0]][v.a[1]][v.a[2]] -1 << '\n';
-                                return;
                             }
 
                             // cout << '0' << ' ';
@@ -173,10 +180,14 @@ void bfs()
                 }
             }
         }
-        else if (!q2.empty())
+        while (!q2.empty())
         {
             state u = q2.front();
             // cout<<u.a[0]<<' '<<u.a[1]<<' '<<u.a[2]<<' '<<u.step<<'\n';
+            if(u.step>d2){
+                d2++;
+                break;
+            }
             q2.pop();
             // if ((vis1[u.a[0]][u.a[1]][u.a[2]] > 0) && (vis2[u.a[0]][u.a[1]][u.a[2]] > 0))
             // {
@@ -202,16 +213,16 @@ void bfs()
                             if (!vis2[v.a[0]][v.a[1]][v.a[2]])
                             {
                                 vis2[v.a[0]][v.a[1]][v.a[2]] = v.step;
+                                if (vis1[v.a[0]][v.a[1]][v.a[2]])
+                                {
+                                    // cout << '2' << ' ';
+                                    // cout<<v.a[0]<<' '<<v.a[1]<<' '<<v.a[2]<<' '<<v.step<<'\n';
+                                    cout << vis1[v.a[0]][v.a[1]][v.a[2]] + vis2[v.a[0]][v.a[1]][v.a[2]]  << '\n';
+                                    return;
+                                }
                                 q2.push(v);
                                 // cout<<'2'<<' ';
                                 // cout<<v.a[0]<<' '<<v.a[1]<<' '<<v.a[2]<<' '<<v.step<<'\n';
-                            }
-                            if (vis1[v.a[0]][v.a[1]][v.a[2]])
-                            {
-                                // cout << '2' << ' ';
-                                // cout<<v.a[0]<<' '<<v.a[1]<<' '<<v.a[2]<<' '<<v.step<<'\n';
-                                cout << vis1[v.a[0]][v.a[1]][v.a[2]] + vis2[v.a[0]][v.a[1]][v.a[2]]-1 << '\n';
-                                return;
                             }
 
                             // cout << 1 << ' ';

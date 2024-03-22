@@ -51,13 +51,13 @@ void solve()
         cin>>xingbie[u] >> v1 >> v2;
         if (v1 != -1)
         {
-            xingbie[v1] = 'M';
+            xingbie[v1] = 'F';
             v[u].push_back(v1);
             // cout<<u<<' '<<v1<<'\n';
         }
         if (v2 != -1)
         {
-            xingbie[v2] = 'F';
+            xingbie[v2] = 'M';
             v[u].push_back(v2);
             // cout<<u<<' '<<v2<<'\n';
         }
