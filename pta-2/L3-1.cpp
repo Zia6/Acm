@@ -1,10 +1,12 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <set>
 const int N = 1e5;
 using namespace std;
 map<int, int> fa, le, ri, dep;
 vector<int> v[N];
+set<int> ss;
 struct node
 {
     struct node *left;
@@ -68,12 +70,17 @@ void dfs(node *now)
 }
 int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
     int n;
     cin >> n;
     int t;
     for (int i = 0; i < n; i++)
     {
+
         cin >> t;
+        ss.insert(t);
         node *p = new (node);
         p->value = t;
         p->left = NULL;
@@ -96,7 +103,6 @@ int main()
             cin >> s >> s;
             if (s == "root")
             {
-                
                 if (root->value == t1)
                 {
                     cout << "Yes\n";
@@ -109,6 +115,11 @@ int main()
                 if (s == "parent")
                 {
                     cin >> s >> t2;
+                    if (ss.find(t1) == ss.end() || ss.find(t2) == ss.end())
+                    {
+                        cout << "No\n";
+                        continue;
+                    }
                     if (fa[t2] == t1)
                     {
                         cout << "Yes\n";
@@ -121,6 +132,11 @@ int main()
                     if (s == "left")
                     {
                         cin >> s >> s >> t2;
+                        if (ss.find(t1) == ss.end() || ss.find(t2) == ss.end())
+                        {
+                            cout << "No\n";
+                            continue;
+                        }
                         if (le[t2] == t1)
                         {
                             cout << "Yes\n";
@@ -131,12 +147,17 @@ int main()
                     else
                     {
                         cin >> s >> s >> t2;
+                        if (ss.find(t1) == ss.end() || ss.find(t2) == ss.end())
+                        {
+                            cout << "No\n";
+                            continue;
+                        }
                         if (ri[t2] == t1)
                         {
                             cout << "Yes\n";
                         }
                         else
-                            cout << 'No\n';
+                            cout << "No\n";
                     }
                 }
             }
@@ -147,6 +168,11 @@ int main()
             if (s == "on")
             {
                 cin >> s >> s >> s;
+                if (ss.find(t1) == ss.end() || ss.find(t2) == ss.end())
+                {
+                    cout << "No\n";
+                    continue;
+                }
                 if (dep[t1] == dep[t2])
                 {
                     cout << "Yes\n";
@@ -156,6 +182,11 @@ int main()
             }
             else
             {
+                if (ss.find(t1) == ss.end() || ss.find(t2) == ss.end())
+                {
+                    cout << "No\n";
+                    continue;
+                }
                 if (fa[t1] == fa[t2])
                 {
                     cout << "Yes\n";
