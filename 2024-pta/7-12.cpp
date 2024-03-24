@@ -56,7 +56,9 @@ void solve()
             // cout<<u<<' '<<v1<<'\n';
         }
         if (v2 != -1)
-        {
+        {{
+            
+        }
             xingbie[v2] = 'F';
             v[u].push_back(v2);
             // cout<<u<<' '<<v2<<'\n';
