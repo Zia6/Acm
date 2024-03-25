@@ -7,8 +7,8 @@
 #include<cmath>
 using namespace std;
 const int maxs = 105, maxn = 1e4 + 100;
-int dx[] = {1, -1, 1, -1, 1, -1, 0, 0};
-int dy[] = {0, 0, 1, 1, -1, -1, 1, -1};
+int dx[8] = {1, -1, 1, -1, 1, -1, 0, 0};
+int dy[8] = {0, 0, 1, 1, -1, -1, 1, -1};
 int s, e, n, m;
 int g[maxs][maxs];
 double dis[maxn];
@@ -19,7 +19,7 @@ struct node{
     double dis;
     bool operator <(const node& n)const {
         return dis > n.dis;
-    } 
+    }
 };
 struct vec
 {
@@ -43,7 +43,7 @@ void bfs()
     double ans = 0;
     for (int i = 0; i < 2; i++)
     {
-        printf("%d\n", i);
+        // printf("%d\n", i);
         memset(vis, 0, sizeof(vis));
         for (int k = 0; k < maxn;k++)
             dis[k] = 1e9 + 5;
@@ -56,7 +56,7 @@ void bfs()
         while (!q.empty())
         {
             node now = q.top();
-            printf("%d %d %d\n", now.id,x[now.id],y[now.id]);
+            // printf("%d %d %d %f\n", now.id,x[now.id],y[now.id],dis[now.id]);
             q.pop();
             vis[x[now.id]][y[now.id]] = true;
             for (int j = 0; j < 8; j++)
@@ -64,7 +64,7 @@ void bfs()
                 int nx = x[now.id] + dx[j], ny = y[now.id] + dy[j];
                 // printf("%d %d\n", nx, ny);
                 if (nx >= 0 && ny >= 0 && nx < n && ny < m&&!vis[nx][ny]&&(f(now.id,id[nx][ny],i)||id[nx][ny]==e)){
-                    double nexdis = dis[now.id] + sqrt(dx[j] * dx[j] + dy[j] * dy[j]) * (g[nx][ny] + g[x[now.id]][y[now.id]]);
+                    double nexdis = dis[now.id] + ((dx[j]!=0&&dy[j]!=0)?sqrt(2)-1:0) * (g[nx][ny] + g[x[now.id]][y[now.id]])+1.0*g[nx][ny];
                     if(nexdis<dis[id[nx][ny]]){
                         dis[id[nx][ny]] = nexdis;
                         q.push({id[nx][ny], nexdis});
@@ -74,7 +74,7 @@ void bfs()
         }
         ans += dis[e];
     }
-    printf("%f\n", ans - g[x[s]][y[s]] - g[x[e]][y[e]]);
+    printf("%.2f\n", ans + g[x[s]][y[s]] - g[x[e]][y[e]]);
 }
 int main()
 {
@@ -91,7 +91,7 @@ int main()
         }
     }
     int x1, y1, x2, y2;
-    scanf("%d %d %d %d", &x1, &y1, &x2, &y2);
+    scanf("%d %d %d %d", &y1, &x1, &y2, &x2);
     s = id[x1][y1], e = id[x2][y2];
     if(x1>x2)
         swap(s, e);
