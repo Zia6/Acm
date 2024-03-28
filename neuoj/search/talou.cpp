@@ -1,31 +1,33 @@
 #include <iostream>
 #include <cstdio>
-#include <set>
-#include <unordered_set>
+#include<map>
 #include <vector>
 #include <algorithm>
 const int maxn = 2e5 + 5;
-int a[maxn];
+int a[maxn], b[maxn];
 using namespace std;
-multiset <int> s;
 int main()
 {
-    int n;
+    int n, cnt = 0;
     scanf("%d", &n);
     for (int i = 0; i < n; i++)
     {
-        scanf("%d", &a[i]);
-    }
-    for (int i = 0; i < n; i++)
-    { 
-        auto it = upper_bound(s.begin(), s.end(), a[i]);
-        if (it != s.end())
-        {
-            s.erase(it);
+        int t;
+        scanf("%d", &t);
+        if(!cnt||a[cnt - 1]<=t){
+            a[cnt++] = t;
+        }else {
+            int l = 0, r = cnt - 1;
+            int mid = (l + r) >> 1;
+            while(l < r){
+                mid = (l + r) >> 1;
+                if(a[mid]>t){
+                    r = mid;
+                }else
+                    l = mid + 1;
+            }
+            a[l] = t;
         }
-        s.insert(a[i]);
     }
-    // for(auto i : s)
-    //     printf("%d", i);
-    printf("%d\n", s.size());
+    cout << cnt << '\n';
 }
