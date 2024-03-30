@@ -1,33 +1,41 @@
 #include <cstdio>
-#include <set>
+#include <vector>
 #include <algorithm>
 using namespace std;
 const int N = 2e5 + 5;
+struct node{
+    int index;
+    int value;
+    bool operator < (const node& n) const {
+        return value < n.value;
+    }
+};
+bool cmp(node n1,node n2){
+    return n1.value < n2.value;
+}
+vector<node> v;
+bool vis[N];
 int a[N];
-int main(){
-    int n, x, ans = 0;
-    int l = 0, r = n - 1, rr;
-    scanf("%d %d", &n, &x);
-    for (int i = 0; i < n;i++){
-        scanf("%d", a + i);
+int main()
+{
+    int n, m, t;
+    scanf("%d %d", &n, &m);
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &a + i);
+        vis[i] = false;
     }
     sort(a, a + n);
-    reverse(a, a + n);
-    while(l < r){
-        int mid = l + ((r - l) >> 1);
-        if(a[n-1] + a[mid] <= x)
-            r = mid;
-        else
-            l = mid + 1;
+    for (int i = 0; i < n;i++){
+        v.push_back({a[i], i});
     }
-    l = n - 1;
-    while(l < r){
-        if(a[l] + a[r] <= x){
-            ans++;
-            l++;
-            r--;
-        }else {
-            
+        for (int i = n - 1; i >= 0; i--)
+        {
+            if (vis[i])
+                continue;
+            vis[i] = true;
+            v.pop_back();
+            node no = {m - a[i], 0};
+            node* it = ;
         }
-    }
 }
