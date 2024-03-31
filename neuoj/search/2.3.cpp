@@ -36,6 +36,5 @@ int main()
             vis[i] = true;
             v.pop_back();
             node no = {m - a[i], 0};
-            node* it = ;
         }
 }
