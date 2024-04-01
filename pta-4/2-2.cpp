@@ -32,12 +32,17 @@ int main(){
     for (int i = 1; i <= n;i++){
         if(in[i] == 0){
             st = i;
-            dfs(st);
+            break;
+
         }
     }
+    dfs(st);
     // for (int i = 1; i <= n;i++){
     //     cout << dep[i] << ' ';
     // }
         // cout << st << '\n';
-        cout << ans;
+    if(ans != 0)
+    cout << ans;
+    else
+        cout << st;
 }
