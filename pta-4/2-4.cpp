@@ -1,56 +1,41 @@
 #include <cstdio>
 #include <queue>
 #include <iostream>
+#include <stack>
 using namespace std;
-queue<int> q;
+stack<int> q;
 int main()
 {
     int n, m, k;
-    bool flag = false;
+    cin >> n >> m >> k;
+
     while (k--)
     {
-
+        bool flag = false;
         int cnt = 1;
         for (int i = 1; i <= n; i++)
         {
-            while (!q.empty() && q.front() == cnt)
+            int t;
+            cin >> t;
+            q.push(t);
+            while (!q.empty() && q.top() == cnt)
             {
+                // cout << i << ' ' << cnt << ' ';
                 q.pop();
                 cnt++;
             }
-            int t;
-            cin >> t;
-            if (t == cnt)
-            {
-                cnt++;
-                continue;
-            }
-            else
-            {
-                q.push(t);
-            }
-            if (q.size() > m)
-            {
-                break;
-            }
+            if ((int)q.size() > m)
+                flag = true;
         }
-        if (q.size() > m)
+        if (flag || !q.empty())
         {
             cout << "NO" << '\n';
-            while(!q.empty()){
-            q.pop();
+            while (!q.empty())
+            {
+                q.pop();
+            }
         }
-            continue;
-        }
-        while (!q.empty() && q.front() == cnt)
-        {
-            cnt++;
-        }
-        if(!q.empty()){
+        else
             cout << "YES" << '\n';
-        }
-        while(!q.empty()){
-            q.pop();
-        }
     }
 }
