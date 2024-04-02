@@ -1,59 +1,56 @@
-#include <cstdio>
-#include <algorithm>
-#include <cstring>
+#include<cstdio>
+#include<set>
+#include<queue>
+#include<algorithm>
 using namespace std;
 const int maxn = 2e5 + 5;
-const int inf = 1e9 + 5;
-struct seg
-{
-    int x, y;
-    bool operator<(const seg &s)
-    {
-        return x == s.x ? y < s.y : x < s.x;
+struct node{
+    int x;
+    int index;
+    bool operator < (const node &n)const {
+        return x < n.x;
     }
 };
-int a[maxn];
-seg s[maxn];
-int main()
-{
-    int n, x, y;
+struct peo{
+    int x, y, index;
+    bool operator < (const peo &n)const {
+        return x < n.x;
+    }
+}no[maxn];
+multiset<node> q;
+int ans[maxn];
+int main(){
+    int n, a, b;
+    int cnt = 1;
+    q.insert({0, 1});
     scanf("%d", &n);
-    for (int i = 0; i < maxn; i++)
-        a[i] = inf;
-    a[0] = 0;
-    // for (int i = 0; i < n; i++)
-    // {
-    //     printf("%d\n", a[i]);
-    // }
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%d %d", &x, &y);
-        s[i].x = x, s[i].y = y;
+    for (int i = 0; i < n;i++){
+        scanf("%d %d", &a, &b);
+        no[i].x = a, no[i].y = b;
+        no[i].index = i;
     }
-    sort(s, s + n);
-    // for (int i = 0; i < n; i++)
-    // {
-    //     printf("%d %d\n", s[i].x, s[i].y);
-    // }
-    for (int i = 0; i < n; i++)
-    {
-        auto it = upper_bound(a, a + n, s[i].x);
-        *it = s[i].y;
-        // printf("%d\n", it - a);
-    }
-
-    // for (int i = 0; i < n; i++)
-    // {
-    //     printf("%d\n", a[i]);
-    // }
-    for (int i = 1; i < maxn; i++)
-    {
-        if (a[i] < inf)
-            continue;
-        else
-        {
-            printf("%d\n", i - 1);
-            return 0;
+    sort(no, no + n);
+    for (int i = 0; i < n;i++){
+        int index = no[i].index;
+        a = no[i].x, b = no[i].y;
+        auto it = q.lower_bound({a, a});
+        if(it == q.begin()){
+            ans[index] = ++cnt;
+            q.insert({b, cnt});
+        }else {
+            it--;
+            node tem = *it;
+            tem.x = b;
+            ans[index] = it->index;
+            q.erase(it);
+            q.insert(tem);
+ 
         }
+    }
+        printf("%d\n", cnt);
+    for (int i = 0; i < n;i++){
+        printf("%d", ans[i]);
+        if(i < n - 1)
+            printf(" ");
     }
 }
