@@ -13,25 +13,16 @@ int main()
 {
     int n;
     cin >> n;
-    for (int i = 1; i <= n; i++)
-    {
-        if (n % i == 0)
-        {
-            v.push_back(i);
-        }
-    }
     long long ans = 0;
     mp.insert({0, 1});
     for (int i = 1; i <= n; i++)
     {
         cin >> a[i];
-        pre[i] = a[i] + pre[i - 1];
-        for (long long x : v)
+        pre[i] = (a[i] + pre[i - 1]) % n;
+        pre[i] = (pre[i] + n) % n;
+        if (mp.count(pre[i]))
         {
-            if (mp.count(pre[i] - x))
-            {
-                ans += mp[pre[i] - x];
-            }
+            ans += mp[pre[i]];
         }
         mp[pre[i]]++;
     }
