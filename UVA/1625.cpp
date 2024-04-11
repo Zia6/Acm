@@ -34,10 +34,10 @@ void solve()
     //     }
     //     std::cout << '\n';
     // }
-    std::cout << l[0] << ' ' << l[1] << '\n';
-    for (int i = 0; i < l[0]; i++)
+    // std::cout << l[0] << ' ' << l[1] << '\n';
+    for (int i = 0; i <= l[0]; i++)
     {
-        for (int j = 0; j < l[1]; j++)
+        for (int j = 0; j <= l[1]; j++)
         {
             cnt[i][j] = inf;
             dp[i][j] = inf;
@@ -45,38 +45,23 @@ void solve()
     }
     dp[0][0] = 0;
     cnt[0][0] = 0;
-    if(s[0][0] == s[1][0]){
-        dp[0][0] = 1;
-        int x = s[0][0] - 'A';
-        if(tmp[x] > 2){
-            cnt[0][0] = 1;
-        }
-    }else {
-        int x = s[0][0] - 'A', y = s[1][0] - 'A';
-        if(tmp[x] >= 2){
-            cnt[0][0]++;
-        }
-        if(tmp[y] >= 2){
-            cnt[0][0]++;
-        }
-    }
-    for (int i = 0; i < l[0]; i++)
+    for (int i = 0; i <= l[0]; i++)
     {
-        for (int j = 0; j < l[1]; j++)
+        for (int j = 0; j <= l[1]; j++)
         {
             if (i > 0)
             {
-                int x = s[0][i] - 'A';
+                int x = s[0][i - 1] - 'A';
                 cnt[i][j] = cnt[i - 1][j];
                 dp[i][j] = min(dp[i][j], dp[i - 1][j] + cnt[i - 1][j]);
                 if (tmp[x] >= 2)
                 {
                     {
-                        if (st[0][x] == i && st[1][x] > j)
+                        if (st[0][x] == i - 1 && st[1][x] > j - 1)
                         {
                             cnt[i][j]++;
                         }
-                        if (en[0][x] == i && en[1][x] <= j)
+                        if (en[0][x] == i - 1 && en[1][x] <= j - 1)
                         {
                             cnt[i][j]--;
                         }
@@ -85,25 +70,25 @@ void solve()
             }
             if (j > 0)
             {
-                int x = s[1][j] - 'A';
+                int x = s[1][j - 1] - 'A';
                 dp[i][j] = min(dp[i][j], dp[i][j - 1] + cnt[i][j - 1]);
                 cnt[i][j] = cnt[i][j - 1];
                 if (tmp[x] >= 2)
                 {
-                    if (st[1][x] == j && st[0][x] > i)
+                    if (st[1][x] == j - 1 && st[0][x] > i - 1)
                     {
                         cnt[i][j]++;
                     }
-                    if (en[1][x] == j && en[0][x] <= i)
+                    if (en[1][x] == j - 1 && en[0][x] <= i - 1)
                     {
                         cnt[i][j]--;
                     }
                 }
             }
-            std::cout << i << ' ' << j << ' ' << cnt[i][j] << ' ' << dp[i][j] << '\n';
+            // std::cout << i << ' ' << j << ' ' << cnt[i][j] << ' ' << dp[i][j] << '\n';
         }
     }
-    std::cout << dp[l[0] - 1][l[1] - 1] << '\n';
+    std::cout << dp[l[0]][l[1]] << '\n';
 }
 int main()
 {
