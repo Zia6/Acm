@@ -1,10 +1,9 @@
-#include<iostream>
+#include <iostream>
 #include <cstring>
-#include<string>
+#include <string>
 using namespace std;
 const int maxn = 1e3 + 5;
-const int inf = 1e8 + 5;
-char s[maxn];
+string s;
 int d[maxn][maxn];
 bool match(char c1, char c2)
 {
@@ -12,24 +11,31 @@ bool match(char c1, char c2)
 }
 // d[i][j] == d[i + 1][j - 1]
 // d[i][j] = d[i][k] + d[k + 1][j]
-void print(int l,int r){
-    if(l > r)
+void print(int l, int r)
+{
+    if (l > r)
         return;
-    if(l == r){
-        if(s[l] == '(' || s[r] == ')'){
+    if (l == r)
+    {
+        if (s[l] == '(' || s[r] == ')')
+        {
             cout << "()";
-        }else
+        }
+        else
             cout << "[]";
         return;
     }
-    if(match(s[l],s[r]) && d[l][r] == d[l + 1][r - 1]){
+    if (match(s[l], s[r]) && d[l][r] == d[l + 1][r - 1])
+    {
         cout << s[l];
         print(l + 1, r - 1);
         cout << s[r];
         return;
     }
-    for (int k = l ; k < r;k++){
-        if(d[l][r] == d[l][k] + d[k + 1][r]){
+    for (int k = l; k < r; k++)
+    {
+        if (d[l][r] == d[l][k] + d[k + 1][r])
+        {
             print(l, k);
             print(k + 1, r);
             return;
@@ -39,12 +45,14 @@ void print(int l,int r){
 int main()
 {
     int T;
-    cin >> T;
+    getline(cin, s);
+    scanf("%d", &T);
     getchar();
+    getline(cin, s);
     while (T--)
     {
-        fgets(s, maxn, stdin);
-        int l = strlen(s) - 1;
+        getline(cin,s);
+        int l = s.length();
         for (int i = 0; i < l; i++)
         {
             d[i][i] = 1;
@@ -55,15 +63,20 @@ int main()
             for (int j = i + 1; j < l; j++)
             {
                 d[i][j] = l;
-                if(match(s[i],s[j])){
+                if (match(s[i], s[j]))
+                {
                     d[i][j] = min(d[i][j], d[i + 1][j - 1]);
                 }
-                for (int k = i; k < j; k++){
+                for (int k = i; k < j; k++)
+                {
                     d[i][j] = min(d[i][k] + d[k + 1][j], d[i][j]);
                 }
             }
         }
         print(0, l - 1);
-        getchar();
+        cout << '\n';
+        if(T)
+            cout << '\n';
+        getline(cin, s);
     }
 }
