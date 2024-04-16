@@ -45,7 +45,6 @@ void print(int l, int r)
 int main()
 {
     int T;
-    getline(cin, s);
     scanf("%d", &T);
     getchar();
     getline(cin, s);
