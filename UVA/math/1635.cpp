@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <cstring>
 #include <vector>
 using namespace std;
 using ll = long long;
@@ -7,31 +8,13 @@ const int maxn = 1e5 + 5;
 int e[maxn], vis[maxn], prime[maxn], ee[maxn];
 int cnt = 0;
 vector<int> vv;
-void euler()
-{
-    vis[1] = 1;
-    for (int i = 2; i < maxn; i++)
-    {
-        if (!vis[i]){
-            prime[cnt++] = i;
-            vis[i] = 1;
-            // cout << i << ' ';
-        }
-        for (int j = 0; j < cnt && i * prime[j] < maxn; j++)
-        {
-            vis[i * prime[j]] = 1;
-            if (i % prime[j] == 0)
-                break;
-        }
-    }
-}
 void add_integer(int x, int d)
 {
     for (int i = 0; i < cnt; i++)
     {
         while (x % prime[i] == 0)
         {
-            e[i] += d;
+            ee[i] -= d;
             x /= prime[i];
         }
         if (x == 1)
@@ -42,14 +25,14 @@ bool check()
 {
     for (int i = 0; i < cnt; i++)
     {
-        if (e[i] < ee[i])
+        if (ee[i] > 0)
         {
             return false;
         }
     }
     return true;
 }
-void solve(int n, int m)
+void solve(int n)
 {
     vv.clear();
     int ans = 0;
@@ -64,35 +47,42 @@ void solve(int n, int m)
         }
     }
     cout << ans << '\n';
-    for (auto it : vv)
+    for (int i = 0; i < vv.size();i++)
     {
-        cout << it << ' ';
+        cout << vv[i];
+        cout << (i == vv.size() - 1 ? '\n' : ' ');
     }
-    cout << '\n';
+    if(ans == 0)
+        cout << '\n';
 }
 int main()
 {
     int n, m, mm;
-    euler();
     while (cin >> n >> m)
     {
-        cout << n << ' ' << m << '\n';
-        for (int i = 0; i < cnt; i++)
+        cnt = 0;
+        memset(ee, 0, sizeof(ee));
+        int mm = floor(sqrt(m) + 0.5);
+        // cout << n << ' ' << m << '\n';
+        for (int i = 2; i <= mm; i++)
         {
             // cout << 1 << '\n';
-            while (m % prime[i] == 0)
+            if (m % i == 0)
             {
-                ee[i] += 1;
-                m /= prime[i];
+                prime[cnt] = i;
+                while (m % i == 0)
+                {
+                    ee[cnt]++;
+                    m /= prime[cnt];
+                }
+                cnt++;
             }
-            if (m == 1)
-                break;
         }
-        if(m > 1){
-            cout << 0 << '\n';
-            cout << '\n';
-            continue;
+        if (m > 1)
+        {
+            prime[cnt] = m;
+            ee[cnt++]++;
         }
-        solve(n, mm);
+        solve(n);
     }
 }
