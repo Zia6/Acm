@@ -1,7 +1,7 @@
 #include<iostream>
 using namespace std;
 const int maxn = 5e4 + 5;
-int pi[maxn], prime[maxn]; // 欧拉函数 质数
+int pi[maxn], prime[maxn], pre[maxn];
 int cnt = 0;
 void init(){
     pi[1] = 1;
@@ -11,11 +11,21 @@ void init(){
             prime[cnt++] = i;
         }
         for (int j = 0; j < cnt && i * prime[j] < maxn;j++){
-            pi[i * prime[j]] = pi[i] * pi[prime[j]]; 
+            pi[i * prime[j]] = pi[i] * pi[prime[j]];
             if(i % prime[j] == 0){
                 pi[i * prime[j]] = prime[j] * pi[i];
                 break;
             }
         }
+    }
+    for (int i = 1; i < maxn;i++){
+        pre[i] = pi[i] + pre[i - 1];
+    }
+}
+int main(){
+    init();
+    int n;
+    while(cin >> n && n){
+        cout << 2 * pre[n] - 1 << '\n';
     }
 }
