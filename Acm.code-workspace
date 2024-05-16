@@ -12,7 +12,8 @@
             "queue": "cpp",
             "__hash_table": "cpp",
             "__tree": "cpp",
-            "string": "cpp"
+            "string": "cpp",
+            "cmath": "cpp"
         }
     }
 }
