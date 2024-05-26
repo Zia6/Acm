@@ -11,6 +11,21 @@
 #include <cctype>
 #include <iomanip>
 #include <sstream>
+template <class T>
+bool lexicographicallySmaller(const std::vector<T> &a, const std::vector<T> &b)
+{
+    int n = a.size();
+    int m = b.size();
+    for (int i = 0; i < n && i < m; i++)
+    {
+        if (a[i] < b[i])
+            return true;
+        if (a[i] > b[i])
+            return false;
+    }
+    return (i == n & i < m);
+}
+
 
 template <class T>
 inline void read(T &x)
