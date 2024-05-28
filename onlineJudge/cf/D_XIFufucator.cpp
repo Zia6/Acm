@@ -42,6 +42,8 @@ std::vector<int> pos[maxn];
 std:: map<pr<int,int>,int> count;
 std:: map<pr<int,int>,pr<int,int>> solution;
 void init(){
+    poww[0][0] = 1;
+    poww[1][0] = 1;
     for(int i = 1;i < maxn;i++ ){
         poww[0][i] = 1ll * poww[0][i - 1] * c1 % p1;
         poww[1][i] = 1ll * poww[1][i - 1] * c2 % p2; 
@@ -52,20 +54,21 @@ pr<int,int> get_hash(std::string& s){
     int l = s.size();
     pr<int,int> ans;
     for(int i = 0;i < l;i++){
-        ans.first = (ans.first * c1 + s[i]) % p1;
-        ans.second = (ans.second * c2 + s[i]) % p2;
+        ans.first = (ans.first * c1 % p1+ s[i]) % p1;
+        ans.second = (ans.second * c2 % p2 + s[i]) % p2;
     }
     return ans;
 }
 
 pr<int,int> modify_hash(std::string& s,pr<int,int> val,int index){
-    val.first -= s[index] * poww[0][index] % p1;
-    val.first += (s[index] ^ 1)* poww[0][index] % p1;
+    int l = s.size();
+    val.first -= s[index] * poww[0][l - 1 - index] % p1;
+    val.first += (s[index] ^ 1)* poww[0][l - 1- index] % p1;
     val.first += p1;
     val.first %= p1;
 
-    val.second -= s[index] * poww[1][index] % p2;
-    val.second += (s[index] ^ 1)* poww[1][index] % p2;
+    val.second -= s[index] * poww[1][l - 1- index] % p2;
+    val.second += (s[index] ^ 1)* poww[1][l - 1 - index] % p2;
     val.second += p2;
     val.second %= p2;
     return val;
@@ -95,7 +98,7 @@ void solve(){
         for(int i = 0;i < n;i++){
             pr<int,int> tem = modify_hash(t,now,i);
             if(!solution.count(tem)) solution[tem] = mp(i,j);
-            count[tem]++;
+            count[tem] = count[tem] + 1;
         }
     }
     pr<pr<int,int>,int> ans; 
