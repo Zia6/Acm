@@ -18,7 +18,7 @@ struct edge{
     int nex;
 }e[maxn];
 int head[maxn], cnt;
-int dfn[maxn], low[maxn], scc[maxn], in[maxn], out[maxn], scc_cnt, dfn_cnt;
+int dfn[maxn], low[maxn], scc[maxn], in[maxn], out[maxn], scc_cnt, dfn_cnt,father[maxn];
 int sz[maxn];
 std::stack<int> s;
 
@@ -28,13 +28,14 @@ void add_edge(int u, int v){
     head[u] = cnt++;
 }
 
-void tarjan(int u){
+void tarjan(int u,int fa){
     dfn[u] = low[u] = ++dfn_cnt;
+    father[u] = fa;
     s.push(u);
     for(int i = head[u]; ~i; i = e[i].nex){
         int v = e[i].v;
         if(!dfn[v]){
-            tarjan(v);
+            tarjan(v,u);
             low[u] = std::min(low[u], low[v]);
         }else if(!scc[v]){
             low[u] = std::min(low[u], dfn[v]);

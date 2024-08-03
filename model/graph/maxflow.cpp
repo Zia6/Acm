@@ -2,73 +2,130 @@
 #include<vector>
 #include<queue>
 #include<cstring>
-#define int long long
-const int maxn = 1e3 + 5;
-const int inf = 0x3f3f3f3f;
-struct Edge{
-    int u,v,flow,cap;
-    Edge(int u,int v,int flow,int cap):u(u),v(v),flow(flow),cap(cap){}
+using ll = long long;
+
+struct Edge {
+  int from, to, cap, flow;
+
+  Edge(int u, int v, int c, int f) : from(u), to(v), cap(c), flow(f) {}
 };
 
-struct EdmondsKarp{
-    int n,m;
-    std:: vector<Edge> edges;
-    std:: vector<int> G[maxn];
-    int a[maxn],p[maxn];
+bool operator<(const Edge& a, const Edge& b) {
+  return a.from < b.from || (a.from == b.from && a.to < b.to);
+}
+const int maxn = 4e3 + 5;
+const int INF = 0x3f3f3f3f;
+struct ISAP {
+  int n, m, s, t;
+  std::vector<Edge> edges;
+  std::vector<int> G[maxn];
+  bool vis[maxn];
+  int d[maxn];
+  int cur[maxn];
+  int p[maxn];
+  int num[maxn];
 
-    void init(int n){
-        for(int i = 0;i < n;i++){
-            G[i].clear();
+  void AddEdge(int from, int to, int cap) {
+    edges.push_back(Edge(from, to, cap, 0));
+    edges.push_back(Edge(to, from, 0, 0));
+    m = edges.size();
+    G[from].push_back(m - 2);
+    G[to].push_back(m - 1);
+  }
+
+  bool BFS() {
+    memset(vis, 0, sizeof(vis));
+    std::queue<int> Q;
+    Q.push(t);
+    vis[t] = 1;
+    d[t] = 0;
+    while (!Q.empty()) {
+      int x = Q.front();
+      Q.pop();
+      for (int i = 0; i < G[x].size(); i++) {
+        Edge& e = edges[G[x][i] ^ 1];
+        if (!vis[e.from] && e.cap > e.flow) {
+          vis[e.from] = 1;
+          d[e.from] = d[x] + 1;
+          Q.push(e.from);
         }
-        edges.clear();
+      }
     }
+    return vis[s];
+  }
 
-    void addEdge(int u,int v,int cap){
-        edges.push_back(Edge(u,v,0,cap));
-        edges.push_back(Edge(v,u,0,0));
-        m = edges.size();
-        G[u].push_back(m-2);
-        G[v].push_back(m-1);
+  void init(int n) {
+    this->n = n;
+    for (int i = 0; i < n; i++) G[i].clear();
+    edges.clear();
+  }
+
+  int Augment() {
+    int x = t, a = INF;
+    while (x != s) {
+      Edge& e = edges[p[x]];
+      a = std::min(a, e.cap - e.flow);
+      x = edges[p[x]].from;
     }
+    x = t;
+    while (x != s) {
+      edges[p[x]].flow += a;
+      edges[p[x] ^ 1].flow -= a;
+      x = edges[p[x]].from;
+    }
+    return a;
+  }
 
-    int Maxflow(int s,int t){
-        int flow = 0;
-        while(1){
-            memset(a,0,sizeof(a));
-            std:: queue<int> Q;
-            Q.push(s);
-            a[s] = inf;
-            while(!Q.empty()){
-                int x = Q.front();
-                Q.pop();
-                for(int i = 0;i < G[x].size();i++){
-                    Edge& e = edges[G[x][i]];
-                    if(!a[e.v] && e.cap > e.flow){
-                        p[e.v] = G[x][i];
-                        a[e.v] = std::min(a[x],e.cap - e.flow);
-                        Q.push(e.v);
-                    }
-                }
-                if(a[t]) break;
-            }
-            if(!a[t]) break;
-            for(int u = t;u != s;u = edges[p[u]].u){
-                edges[p[u]].flow += a[t];
-                edges[p[u]^1].flow -= a[t];
-            }
-            flow += a[t];
+  ll Maxflow(int s, int t) {
+    this->s = s;
+    this->t = t;
+    ll flow = 0;
+    BFS();
+    memset(num, 0, sizeof(num));
+    for (int i = 0; i < n; i++) num[d[i]]++;
+    int x = s;
+    memset(cur, 0, sizeof(cur));
+    while (d[s] < n) {
+      if (x == t) {
+        flow += Augment();
+        x = s;
+      }
+      int ok = 0;
+      for (int i = cur[x]; i < G[x].size(); i++) {
+        Edge& e = edges[G[x][i]];
+        if (e.cap > e.flow && d[x] == d[e.to] + 1) {
+          ok = 1;
+          p[e.to] = G[x][i];
+          cur[x] = i;
+          x = e.to;
+          break;
         }
-        return flow;
+      }
+      if (!ok) {
+        int m = n - 1;
+        for (int i = 0; i < G[x].size(); i++) {
+          Edge& e = edges[G[x][i]];
+          if (e.cap > e.flow) m = std::min(m, d[e.to]);
+        }
+        if (--num[d[x]] == 0) break;
+        num[d[x] = m + 1]++;
+        cur[x] = 0;
+        if (x != s) x = edges[p[x]].from;
+      }
     }
+    return flow;
+  }
 };
-signed main(){
-    struct EdmondsKarp ek;
+int main(){
+    struct ISAP Isap;
     int n,m,s,t;
     std :: cin >> n >> m >> s >> t;
+    Isap.init(n + 1);
     for(int i = 0;i < m;i++){
         int u,v,cap;
         std :: cin >> u >> v >> cap;
-        ek.addEdge(u,v,cap);
+        Isap.AddEdge(u,v,cap);
     }
-    std :: cout << ek.Maxflow(s,t) << '\n';
+    std :: cout << Isap.Maxflow(s,t) << '\n';
+    return 0;
 }
